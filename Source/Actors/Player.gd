@@ -2,6 +2,7 @@ extends Actor # Which extends KinematicBody2D
 export var stomp_impulse: = 100.0
 # var direction : Vector2 = Vector2.ZERO
 
+signal player_position(player_position)
 #func _on_EnemyDetector_area_entered(area: Area2D) -> void:
 #	print("detected")
 #	_velocity = calculate_stomp_velocity(_velocity, stomp_impulse)
@@ -27,11 +28,15 @@ func calculate_move_velocity(
 	var output: = linear_velocity
 	output.x = speed.x * direction.x
 	# _velocity.y += gravity * delta
+	
+	# Jump:
 	output.y += gravity * get_physics_process_delta_time()
-	if direction.y == -1.0:
+	if direction.y == -1.0: #Jump == true
 		output.y = speed.y * direction.y
 	if is_jump_interrupted:
 		output.y = 0.0
+	
+	# Retur:
 	return output
 	
 func calculate_stomp_velocity(linear_velocity: Vector2, impulse: float) -> Vector2:
@@ -49,7 +54,9 @@ func _physics_process(_delta: float) -> void:
 	#_velocity.y = max(_velocity.y, speed.y)
 	_velocity = calculate_move_velocity(_velocity, direction, speed, is_jump_interrupted)
 	_velocity = move_and_slide(_velocity, Vector2.UP)
-
+	
+	# Emit position signal to main, so the enemy can acess it
+	emit_signal("player_position", position)
 
 
 
