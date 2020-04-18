@@ -30,7 +30,7 @@ extents = Vector2( 8.80762, 13.4959 )
 extents = Vector2( 7.89203, 12.5479 )
 
 [node name="Player" type="KinematicBody2D"]
-collision_mask = 4
+collision_mask = 6
 script = ExtResource( 9 )
 
 [node name="PlayerSprite" type="AnimatedSprite" parent="."]
@@ -43,8 +43,9 @@ position = Vector2( -0.412911, 1.09958 )
 shape = SubResource( 2 )
 
 [node name="Camera2D" type="Camera2D" parent="."]
-offset = Vector2( 0, -80 )
+offset = Vector2( 0, -40 )
 current = true
+limit_top = -600
 drag_margin_v_enabled = true
 smoothing_enabled = true
 
