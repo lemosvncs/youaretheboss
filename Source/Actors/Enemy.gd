@@ -2,6 +2,8 @@ extends Actor
 
 signal enemy_hp_update(enemy_hp)
 
+export var distance_to_follow_player:int = 100
+
 var jump:bool = false
 var can_jump = false
 var this_player_position:Vector2 = Vector2.ZERO
@@ -14,28 +16,13 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	
-	
-	
-	
-	movement(delta) #doing nothing
-	
 	jump()
 	go_to_player()
 	animation_manager()
 	
 	_velocity.y += gravity * delta
 	_velocity = move_and_slide(_velocity, Vector2.UP)
-	#_velocity = move_and_slide(_velocity, Vector2.UP)
-	#print(_velocity.y)
-func movement(delta):
-	#if is_on_wall():
-	#	_velocity.x = _velocity.x * -1.0
-		
-	
-	#velocity.x = move_and_slide(_velocity, Vector2.UP).x
-	pass
-	
-	
+	print(_velocity)
 	
 func animation_manager():
 	# Moving if moving:
@@ -63,22 +50,24 @@ func go_to_player():
 	var enx: = position.x
 	var delta_pos = plx - enx
 	
-	if delta_pos < -30 or delta_pos > 30:
+	if delta_pos < -100 or delta_pos > 100:
 	#print("delta pos: ", plx - enx)
 	# Se está distante, se aproxima
 		if plx > enx:
-			_velocity.x = speed.x
+			_velocity.x += speed.x
 		elif plx < enx:
-			_velocity.x = -speed.x
-			
-	elif delta_pos < -15 or delta_pos > 15:
+			_velocity.x -= speed.x
+	
+	
+	elif delta_pos > -(95) or delta_pos < (95):
 		# se está próximo, se distanceia
 		if plx > enx:
-			_velocity.x = -speed.x
+			_velocity.x -= speed.x
 		elif plx < enx:
-			_velocity.x = speed.x
+			_velocity.x += speed.x
 	else:
 		_velocity.x = 0
+	print(delta_pos)
 		
 	
 func _on_AtompDetector_body_entered(_body: Node) -> void:
