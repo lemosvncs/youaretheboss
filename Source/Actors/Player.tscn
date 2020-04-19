@@ -29,7 +29,9 @@ extents = Vector2( 8.80762, 13.4959 )
 [sub_resource type="RectangleShape2D" id=3]
 extents = Vector2( 7.89203, 12.5479 )
 
-[node name="Player" type="KinematicBody2D"]
+[node name="Player" type="KinematicBody2D" groups=[
+"Player",
+]]
 collision_mask = 6
 script = ExtResource( 9 )
 

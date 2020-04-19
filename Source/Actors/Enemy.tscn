@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://Source/Actors/Enemy.gd" type="Script" id=1]
 [ext_resource path="res://Assets/Sprites/knight_f_idle_anim_f1.png" type="Texture" id=2]
@@ -9,6 +9,7 @@
 [ext_resource path="res://Assets/Sprites/knight_f_run_anim_f2.png" type="Texture" id=7]
 [ext_resource path="res://Assets/Sprites/knight_f_idle_anim_f2.png" type="Texture" id=8]
 [ext_resource path="res://Assets/Sprites/knight_f_run_anim_f3.png" type="Texture" id=9]
+[ext_resource path="res://Assets/Sprites/weapon_anime_sword.png" type="Texture" id=10]
 
 [sub_resource type="SpriteFrames" id=1]
 animations = [ {
@@ -23,6 +24,35 @@ animations = [ {
 "speed": 4.0
 } ]
 
+[sub_resource type="Animation" id=5]
+resource_name = "SwordAttack"
+length = 0.16
+step = 0.01
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:rotation_degrees")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.08, 0.16, 1 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 0,
+"values": [ 0.0, 90.0, 0.0, 90.0 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.08, 0.16, 1 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( -4.42267, 11.2433 ), Vector2( 5, 11.243 ), Vector2( -4.42267, 11.2433 ), Vector2( 5, 11.243 ) ]
+}
+
 [sub_resource type="RectangleShape2D" id=2]
 extents = Vector2( 4.6277, 7.45449 )
 
@@ -30,9 +60,11 @@ extents = Vector2( 4.6277, 7.45449 )
 extents = Vector2( 2.85556, 2.91649 )
 
 [sub_resource type="RectangleShape2D" id=4]
-extents = Vector2( 10, 9.79728 )
+extents = Vector2( 2.53204, 3.35425 )
 
-[node name="Enemy" type="KinematicBody2D"]
+[node name="Enemy" type="KinematicBody2D" groups=[
+"Enemy",
+]]
 position = Vector2( -0.0897446, 0 )
 collision_layer = 2
 collision_mask = 5
@@ -41,8 +73,18 @@ script = ExtResource( 1 )
 [node name="EnemySprite" type="AnimatedSprite" parent="."]
 frames = SubResource( 1 )
 animation = "idle"
-frame = 2
+frame = 3
 playing = true
+
+[node name="weapon_anime_sword" type="Sprite" parent="."]
+position = Vector2( -4.42267, 11.2433 )
+scale = Vector2( 0.42822, 0.42822 )
+texture = ExtResource( 10 )
+offset = Vector2( 0.0310316, -14.4778 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="weapon_anime_sword"]
+autoplay = "SwordAttack"
+anims/SwordAttack = SubResource( 5 )
 
 [node name="EnemyCollision" type="CollisionShape2D" parent="."]
 position = Vector2( -0.383843, 6.29659 )
@@ -63,21 +105,23 @@ position = Vector2( 0.0799427, -1.13841 )
 shape = SubResource( 3 )
 
 [node name="FrontDetector" type="Area2D" parent="."]
-collision_layer = 4
+collision_layer = 2
 collision_mask = 4
 
 [node name="FrontCollision" type="CollisionShape2D" parent="FrontDetector"]
-position = Vector2( 20.3133, 4.75633 )
+position = Vector2( 10.5538, -0.0556989 )
 shape = SubResource( 4 )
 
 [node name="BackDetector" type="Area2D" parent="."]
+collision_layer = 2
+collision_mask = 4
 
 [node name="BackDetector" type="CollisionShape2D" parent="BackDetector"]
-position = Vector2( -22.0213, 4.35549 )
+position = Vector2( -9.33681, -0.750001 )
 shape = SubResource( 4 )
 
 [node name="JumpDelay" type="Timer" parent="."]
-wait_time = 2.0
+wait_time = 0.3
 autostart = true
 [connection signal="body_entered" from="StompDetector" to="." method="_on_AtompDetector_body_entered"]
 [connection signal="area_entered" from="FrontDetector" to="." method="_on_FrontDetector_area_entered"]

@@ -6,24 +6,57 @@ var jump:bool = false
 var can_jump = false
 var this_player_position:Vector2 = Vector2.ZERO
 
+var an_jumping:bool = false
+
 func _ready() -> void:
 	pass
 	#_velocity.x = speed.x
 
 func _physics_process(delta: float) -> void:
-	if is_on_wall():
-		_velocity.x *= -1.0
+	
+	
+	
+	
+	movement(delta) #doing nothing
+	
+	jump()
+	go_to_player()
+	animation_manager()
 	
 	_velocity.y += gravity * delta
-	
-	if jump && is_on_floor() && can_jump:
-		_velocity.y = -speed.y
-		can_jump = false
-	
-	go_to_player()
-	_velocity.y = move_and_slide(_velocity, Vector2.UP).y
+	_velocity = move_and_slide(_velocity, Vector2.UP)
 	#_velocity = move_and_slide(_velocity, Vector2.UP)
 	#print(_velocity.y)
+func movement(delta):
+	#if is_on_wall():
+	#	_velocity.x = _velocity.x * -1.0
+		
+	
+	#velocity.x = move_and_slide(_velocity, Vector2.UP).x
+	pass
+	
+	
+	
+func animation_manager():
+	# Moving if moving:
+	if _velocity.x > 100: 
+		$EnemySprite.play("moving")
+		$EnemySprite.flip_h = false
+	elif _velocity.x < -100:
+		$EnemySprite.play("moving")
+		$EnemySprite.flip_h = true
+	else:
+		$EnemySprite.play("idle")
+		$EnemySprite.flip_h = false
+	
+func jump():
+	if can_jump:
+		print(can_jump)
+		if jump == true && is_on_floor() == true:
+			_velocity.y = -speed.y
+			can_jump = false
+			jump = false
+	
 
 func go_to_player():
 	var plx: = this_player_position.x
@@ -62,10 +95,14 @@ func _on_AtompDetector_body_entered(_body: Node) -> void:
 	
 	
 func _on_FrontDetector_body_entered(body: Node) -> void:
-	jump = true
+	if body.is_in_group("Tiles"):
+		print(body.name, can_jump)
+		jump = true
 
 func _on_BackDetector_body_entered(body: Node) -> void:
-	jump = true
+	if body.is_in_group("Tiles"):
+		print(body.name, can_jump)
+		jump = true
 	
 func _on_JumpDelay_timeout() -> void:
 	can_jump = true
