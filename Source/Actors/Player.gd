@@ -4,6 +4,8 @@ export var stomp_impulse: = 100.0
 
 signal player_hp(hp)
 signal player_position(player_position)
+
+var player_velocity:Vector2
 #func _on_EnemyDetector_area_entered(area: Area2D) -> void:
 #	print("detected")
 #	_velocity = calculate_stomp_velocity(_velocity, stomp_impulse)
@@ -15,6 +17,7 @@ func _physics_process(_delta: float) -> void:
 	#_velocity.y = max(_velocity.y, speed.y)
 	_velocity = calculate_move_velocity(_velocity, direction, speed, is_jump_interrupted)
 	_velocity = move_and_slide(_velocity, Vector2.UP)
+	player_velocity = _velocity
 	
 	# Emit position signal to main, so the enemy can acess it
 	emit_signal("player_position", position)
@@ -24,9 +27,9 @@ func damange_manager():
 	
 	
 func _on_EnemyDetector_body_entered(_body: Node) -> void:
-	print(_velocity.y)
+	#print(_velocity.y)
 	_velocity = calculate_stomp_velocity(_velocity, stomp_impulse)
-	print(_velocity.y)
+	#print(_velocity.y)
 
 func get_direction() -> Vector2:
 	return Vector2(
