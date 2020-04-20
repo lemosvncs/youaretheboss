@@ -13,13 +13,17 @@ var sword_hit:bool = false # True if detected collision with player
 var moving_right:bool
 var jump:bool = false
 var can_jump:bool = false
-var this_player_position:Vector2 = Vector2.ZERO
+#var this_player_position:Vector2 = Vector2.ZERO
 var player_position:Vector2 = Vector2.ZERO
+var player_velocity:Vector2 = Vector2.ZERO
 
 var an_jumping:bool = false
 
 onready var player = get_tree().get_nodes_in_group("Player")[0]
 
+onready var plx: = player_position.x
+onready var enx: = position.x
+onready var delta_pos = plx - enx
 
 
 func _ready() -> void:
@@ -31,7 +35,9 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	# Get playerPos
 	player_position = player.position
+	player_velocity = player._velocity
 	
+	define_player_position()
 	jump_tiles()
 	go_to_player()
 	animation_manager()
@@ -44,18 +50,29 @@ func _physics_process(delta: float) -> void:
 	else:
 		moving_right = false
 	#print(moving_right)
+
+func define_player_position():
+	plx = player_position.x
+	enx = position.x
+	delta_pos = plx - enx
+	
 	
 func animation_manager():
+	
+	print(player_velocity)
+	if player_velocity.x == 0:
+		$EnemySprite.play("idle")
+		if delta_pos < 0:
+			$EnemySprite.flip_h = false
+		elif delta_pos >= 0:
+			$EnemySprite.flip_h = true
 	# Moving if moving:
-	if moving_right: 
+	elif moving_right: 
 		$EnemySprite.play("moving")
 		$EnemySprite.flip_h = false
 	elif !moving_right:
 		$EnemySprite.play("moving")
 		$EnemySprite.flip_h = true
-	else:
-		$EnemySprite.play("idle")
-		$EnemySprite.flip_h = false
 		
 	# Attack:
 	if attack:
@@ -91,9 +108,9 @@ func jump_tiles():
 	
 
 func go_to_player():
-	var plx: = player_position.x
-	var enx: = position.x
-	var delta_pos = plx - enx
+	#var plx: = player_position.x
+	#var enx: = position.x
+	#var delta_pos = plx - enx
 	
 	if delta_pos < -distance_to_follow_player or delta_pos > distance_to_follow_player:
 	#print("delta pos: ", plx - enx)

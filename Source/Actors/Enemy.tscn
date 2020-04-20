@@ -139,7 +139,6 @@ frames = SubResource( 1 )
 animation = "idle"
 frame = 3
 playing = true
-flip_h = true
 
 [node name="WeaponSprite" type="Sprite" parent="."]
 position = Vector2( -4.423, 9.45 )
