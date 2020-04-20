@@ -15,12 +15,15 @@ var jump:bool = false
 var can_jump:bool = false
 var this_player_position:Vector2 = Vector2.ZERO
 
-
-
 var an_jumping:bool = false
 
+onready var player = get_tree().get_nodes_in_group("Player")
+
+
+
 func _ready() -> void:
-	pass
+	print(player[0])
+	#get_groups("Player")
 	#_velocity.x = speed.x
 
 func _physics_process(delta: float) -> void:
@@ -64,11 +67,11 @@ func animation_manager():
 func sword_attack():
 	if attack and can_attack:
 		$WeaponSprite/WeaponArea.monitorable = true
-		print("atacking")
+		#print("atacking")
 		
 	else:
 		$WeaponSprite/WeaponArea.monitorable = false
-		print("NOT attacking")
+		#print("NOT attacking")
 	
 	if sword_hit:
 		emit_signal("boss_damage", sword_damage)
@@ -76,7 +79,7 @@ func sword_attack():
 			
 func jump_tiles():
 	if can_jump:
-		print(can_jump)
+		#print(can_jump)
 		if jump == true && is_on_floor() == true:
 			_velocity.y = -speed.y
 			can_jump = false
@@ -100,6 +103,8 @@ func go_to_player():
 	
 	elif delta_pos > -(distance_to_follow_player) or delta_pos < (distance_to_follow_player):
 		attack = true
+		
+		
 		# se está próximo, se distanceia
 		if plx > enx:
 			_velocity.x -= speed.x*fugir_modifier
@@ -108,7 +113,7 @@ func go_to_player():
 	else:
 		attack = false
 		_velocity.x = 0
-	print(delta_pos)
+	#print(delta_pos)
 		
 	
 func _on_AtompDetector_body_entered(_body: Node) -> void:
@@ -126,12 +131,12 @@ func _on_AtompDetector_body_entered(_body: Node) -> void:
 	
 func _on_FrontDetector_body_entered(body: Node) -> void:
 	if body.is_in_group("Tiles"):
-		print(body.name, can_jump)
+		#print(body.name, can_jump)
 		jump = true
 
 func _on_BackDetector_body_entered(body: Node) -> void:
 	if body.is_in_group("Tiles"):
-		print(body.name, can_jump)
+		#print(body.name, can_jump)
 		jump = true
 	
 func _on_JumpDelay_timeout() -> void:
@@ -145,7 +150,6 @@ func _on_Player_player_position(player_position) -> void:
 func _on_WeaponArea_body_entered(body: Node) -> void:
 	if body.name == "Player":
 		sword_hit = true
-
 
 func _on_AttackDelay_timeout() -> void:
 	can_attack = true
