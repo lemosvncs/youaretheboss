@@ -3,7 +3,7 @@ export var stomp_impulse: = 100.0
 # var direction : Vector2 = Vector2.ZERO
 
 signal player_hp(hp)
-signal player_position(player_position)
+#signal player_position(player_position)
 
 var player_velocity:Vector2
 #func _on_EnemyDetector_area_entered(area: Area2D) -> void:
@@ -20,7 +20,7 @@ func _physics_process(_delta: float) -> void:
 	player_velocity = _velocity
 	
 	# Emit position signal to main, so the enemy can acess it
-	emit_signal("player_position", position)
+	#emit_signal("player_position", position)
 	
 func damange_manager():
 	get_groups()

@@ -28,4 +28,3 @@ tile_data = PoolIntArray( -655372, 1073741826, 0, -655371, 1073741826, 0, -65537
 [connection signal="boss_damage" from="Enemy" to="Player" method="_on_Enemy_boss_damage"]
 [connection signal="enemy_hp_update" from="Enemy" to="." method="_on_Enemy_enemy_hp_update"]
 [connection signal="player_hp" from="Player" to="." method="_on_Player_player_hp"]
-[connection signal="player_position" from="Player" to="Enemy" method="_on_Player_player_position"]
