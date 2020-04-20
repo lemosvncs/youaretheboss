@@ -1,12 +1,21 @@
 extends Actor
 
 signal enemy_hp_update(enemy_hp)
+signal boss_damage(sword_damage)
 
-export var distance_to_follow_player:int = 100
+export var distance_to_follow_player:int = 50
+export var fugir_modifier:float = 1.3
+export var sword_damage:int = 1
 
+var can_attack:bool = false
+var attack:bool = false
+var sword_hit:bool = false # True if detected collision with player
+var moving_right:bool
 var jump:bool = false
-var can_jump = false
+var can_jump:bool = false
 var this_player_position:Vector2 = Vector2.ZERO
+
+
 
 var an_jumping:bool = false
 
@@ -16,27 +25,56 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	
-	jump()
+	jump_tiles()
 	go_to_player()
 	animation_manager()
+	sword_attack()
 	
 	_velocity.y += gravity * delta
 	_velocity = move_and_slide(_velocity, Vector2.UP)
-	print(_velocity)
+	if _velocity.x > 1:
+		moving_right = true
+	else:
+		moving_right = false
+	#print(moving_right)
 	
 func animation_manager():
 	# Moving if moving:
-	if _velocity.x > 100: 
+	if moving_right: 
 		$EnemySprite.play("moving")
 		$EnemySprite.flip_h = false
-	elif _velocity.x < -100:
+	elif !moving_right:
 		$EnemySprite.play("moving")
 		$EnemySprite.flip_h = true
 	else:
 		$EnemySprite.play("idle")
 		$EnemySprite.flip_h = false
+		
+	# Attack:
+	if attack:
+		if moving_right:
+			$WeaponSprite/AnimationPlayer.play("swordAttack")
+		elif !moving_right:
+			$WeaponSprite/AnimationPlayer.play("swordAttack_flip_h")
+	elif moving_right:
+		$WeaponSprite/AnimationPlayer.play("weaponIdle")
+	elif !moving_right:
+		$WeaponSprite/AnimationPlayer.play("weaponIdle_flip_h")
+		
+func sword_attack():
+	if attack and can_attack:
+		$WeaponSprite/WeaponArea.monitorable = true
+		print("atacking")
+		
+	else:
+		$WeaponSprite/WeaponArea.monitorable = false
+		print("NOT attacking")
 	
-func jump():
+	if sword_hit:
+		emit_signal("boss_damage", sword_damage)
+		sword_hit = false
+			
+func jump_tiles():
 	if can_jump:
 		print(can_jump)
 		if jump == true && is_on_floor() == true:
@@ -50,22 +88,25 @@ func go_to_player():
 	var enx: = position.x
 	var delta_pos = plx - enx
 	
-	if delta_pos < -100 or delta_pos > 100:
+	if delta_pos < -distance_to_follow_player or delta_pos > distance_to_follow_player:
 	#print("delta pos: ", plx - enx)
 	# Se está distante, se aproxima
+		attack = false
 		if plx > enx:
 			_velocity.x += speed.x
 		elif plx < enx:
 			_velocity.x -= speed.x
 	
 	
-	elif delta_pos > -(95) or delta_pos < (95):
+	elif delta_pos > -(distance_to_follow_player) or delta_pos < (distance_to_follow_player):
+		attack = true
 		# se está próximo, se distanceia
 		if plx > enx:
-			_velocity.x -= speed.x
+			_velocity.x -= speed.x*fugir_modifier
 		elif plx < enx:
-			_velocity.x += speed.x
+			_velocity.x += speed.x*fugir_modifier
 	else:
+		attack = false
 		_velocity.x = 0
 	print(delta_pos)
 		
@@ -99,3 +140,12 @@ func _on_JumpDelay_timeout() -> void:
 
 func _on_Player_player_position(player_position) -> void:
 	this_player_position = player_position
+
+
+func _on_WeaponArea_body_entered(body: Node) -> void:
+	if body.name == "Player":
+		sword_hit = true
+
+
+func _on_AttackDelay_timeout() -> void:
+	can_attack = true

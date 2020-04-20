@@ -84,6 +84,21 @@ text = "Tension:"
 valign = 1
 
 [node name="BarEnemyHealth" type="ProgressBar" parent="."]
+margin_left = 42.6024
+margin_top = 14.919
+margin_right = 354.602
+margin_bottom = 28.919
+custom_styles/fg = SubResource( 1 )
+custom_styles/bg = SubResource( 2 )
+step = 1.0
+value = 100.0
+rounded = true
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="BarBossHealth" type="ProgressBar" parent="."]
 margin_left = 42.0
 margin_top = 34.0
 margin_right = 354.0
@@ -98,4 +113,5 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 [connection signal="main_signal_enemy_hp" from="GameWindow/ViewportContainer/Viewport/MainScene" to="BarEnemyHealth" method="_on_MainScene_main_signal_enemy_hp"]
+[connection signal="main_singal_player_hp" from="GameWindow/ViewportContainer/Viewport/MainScene" to="BarBossHealth" method="_on_MainScene_main_singal_player_hp"]
 [connection signal="timeout" from="GUIWindow/BarEnemyTension/Timer" to="GUIWindow/BarEnemyTension" method="_on_Timer_timeout"]

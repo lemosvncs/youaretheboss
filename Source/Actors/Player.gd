@@ -2,10 +2,26 @@ extends Actor # Which extends KinematicBody2D
 export var stomp_impulse: = 100.0
 # var direction : Vector2 = Vector2.ZERO
 
+signal player_hp(hp)
 signal player_position(player_position)
 #func _on_EnemyDetector_area_entered(area: Area2D) -> void:
 #	print("detected")
 #	_velocity = calculate_stomp_velocity(_velocity, stomp_impulse)
+
+func _physics_process(_delta: float) -> void:
+	var is_jump_interrupted = Input.is_action_just_released("jump") and _velocity.y < 0.0
+	var direction:= get_direction()
+	#_velocity = speed * direction
+	#_velocity.y = max(_velocity.y, speed.y)
+	_velocity = calculate_move_velocity(_velocity, direction, speed, is_jump_interrupted)
+	_velocity = move_and_slide(_velocity, Vector2.UP)
+	
+	# Emit position signal to main, so the enemy can acess it
+	emit_signal("player_position", position)
+	
+func damange_manager():
+	get_groups()
+	
 	
 func _on_EnemyDetector_body_entered(_body: Node) -> void:
 	print(_velocity.y)
@@ -47,17 +63,7 @@ func calculate_stomp_velocity(linear_velocity: Vector2, impulse: float) -> Vecto
 	#print(out, " I: ", impulse)
 	return out
 
-func _physics_process(_delta: float) -> void:
-	var is_jump_interrupted = Input.is_action_just_released("jump") and _velocity.y < 0.0
-	var direction:= get_direction()
-	#_velocity = speed * direction
-	#_velocity.y = max(_velocity.y, speed.y)
-	_velocity = calculate_move_velocity(_velocity, direction, speed, is_jump_interrupted)
-	_velocity = move_and_slide(_velocity, Vector2.UP)
-	
-	# Emit position signal to main, so the enemy can acess it
-	emit_signal("player_position", position)
-
-
-
-
+func _on_Enemy_boss_damage(sword_damage) -> void:
+	hp -= sword_damage
+	emit_signal("player_hp", hp)
+	print("Player HP:", hp)
