@@ -37,13 +37,19 @@ func _physics_process(delta: float) -> void:
 	player_position = player.position
 	player_velocity = player._velocity
 	
+	_apply_gravity(delta)
+	_apply_movement()
+	
 	define_player_position()
 	jump_tiles()
 	go_to_player()
 	animation_manager()
 	sword_attack()
 	
+func _apply_gravity(delta):
 	_velocity.y += gravity * delta
+	
+func _apply_movement():
 	_velocity = move_and_slide(_velocity, Vector2.UP)
 	if _velocity.x > 1:
 		moving_right = true
@@ -58,14 +64,16 @@ func define_player_position():
 	
 	
 func animation_manager():
-	
-	print(player_velocity)
+	#print(player_velocity)
 	if player_velocity.x == 0:
 		$EnemySprite.play("idle")
-		if delta_pos < 0:
+		if delta_pos > 0:
 			$EnemySprite.flip_h = false
-		elif delta_pos >= 0:
+			#$WeaponSprite.flip_h = true
+		elif delta_pos <= 0:
 			$EnemySprite.flip_h = true
+			#$WeaponSprite.flip_h = true
+			#print(delta_pos, $WeaponSprite.flip_h)
 	# Moving if moving:
 	elif moving_right: 
 		$EnemySprite.play("moving")

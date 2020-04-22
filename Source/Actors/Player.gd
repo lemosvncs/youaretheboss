@@ -7,24 +7,19 @@ export var stomp_impulse: = 100.0
 var player_velocity:Vector2
 var direction:Vector2
 var is_jump_interrupted:bool=false
+var stomp=false
+onready var playerSprite = $PlayerSprite
 
-func _physics_process(delta: float) -> void:
-	
-	_gravity(delta)
-	_set_direction()
-	_calculate_move_velocity()
-	_jump(delta)
+func _physics_process(_delta: float) -> void:
+	pass
 
-	
-	_velocity = move_and_slide(_velocity, Vector2.UP)
-	player_velocity = _velocity	
-	#print(_velocity.y)
 	
 func _gravity(delta):
 	_velocity.y += gravity * delta
 	
-func _calculate_move_velocity() -> void:
-	# Me diz se "speed" vai ser aplicado pro player ir pra esquerda ou pra direita
+func _apply_movement() -> void:
+	_velocity = move_and_slide(_velocity, Vector2.UP)
+	player_velocity = _velocity
 	_velocity.x = speed.x * direction.x
 
 func _jump(delta):
@@ -34,19 +29,14 @@ func _jump(delta):
 	if is_jump_interrupted:
 		_velocity.y = 1.0
 
-func _set_direction() -> void:
-	direction.x = Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left")
-	if Input.is_action_just_pressed("jump") and is_on_floor():
-		direction.y = -1.0
-	else:
-		direction.y = 1.0
-	
 func _stomp_velocity() -> void:
 	_velocity = Vector2(_velocity.x, -stomp_impulse)
+	stomp = false
 
 # SIGNALS:
 
 func _on_EnemyDetector_body_entered(_body: Node) -> void:
+	stomp = true
 	_stomp_velocity()
 
 func _on_Enemy_boss_damage(sword_damage) -> void:

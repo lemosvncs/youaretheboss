@@ -24,7 +24,7 @@ animations = [ {
 "speed": 4.0
 } ]
 
-[sub_resource type="Animation" id=5]
+[sub_resource type="Animation" id=2]
 resource_name = "swordAttack"
 length = 0.16
 step = 0.01
@@ -53,7 +53,7 @@ tracks/1/keys = {
 "values": [ Vector2( -4.42267, 11.2433 ), Vector2( 5, 11.243 ), Vector2( -4.42267, 11.2433 ), Vector2( 5, 11.243 ) ]
 }
 
-[sub_resource type="Animation" id=6]
+[sub_resource type="Animation" id=3]
 resource_name = "swordAttack_flip_h"
 length = 0.16
 step = 0.01
@@ -82,7 +82,7 @@ tracks/1/keys = {
 "values": [ Vector2( 4.423, 11.243 ), Vector2( -5, 11.243 ), Vector2( 4.423, 11.243 ), Vector2( 5, 11.243 ) ]
 }
 
-[sub_resource type="Animation" id=7]
+[sub_resource type="Animation" id=4]
 resource_name = "weaponIdle"
 length = 0.4
 tracks/0/type = "value"
@@ -98,7 +98,7 @@ tracks/0/keys = {
 "values": [ Vector2( -4.42267, 11.2433 ), Vector2( -4.423, 9.45 ), Vector2( -4.423, 11.243 ) ]
 }
 
-[sub_resource type="Animation" id=8]
+[sub_resource type="Animation" id=5]
 resource_name = "weaponIdle_flip_h"
 length = 0.4
 tracks/0/type = "value"
@@ -114,16 +114,16 @@ tracks/0/keys = {
 "values": [ Vector2( 4.423, 11.243 ), Vector2( 4.423, 9.45 ), Vector2( 4.423, 11.243 ) ]
 }
 
-[sub_resource type="RectangleShape2D" id=9]
+[sub_resource type="RectangleShape2D" id=6]
 extents = Vector2( 3.9942, 10 )
 
-[sub_resource type="RectangleShape2D" id=2]
+[sub_resource type="RectangleShape2D" id=7]
 extents = Vector2( 4.6277, 7.45449 )
 
-[sub_resource type="RectangleShape2D" id=3]
+[sub_resource type="RectangleShape2D" id=8]
 extents = Vector2( 2.85556, 2.91649 )
 
-[sub_resource type="RectangleShape2D" id=4]
+[sub_resource type="RectangleShape2D" id=9]
 extents = Vector2( 2.53204, 3.35425 )
 
 [node name="Enemy" type="KinematicBody2D" groups=[
@@ -150,10 +150,10 @@ offset = Vector2( 0.0310316, -14.4778 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="WeaponSprite"]
 autoplay = "swordAttack"
-anims/swordAttack = SubResource( 5 )
-anims/swordAttack_flip_h = SubResource( 6 )
-anims/weaponIdle = SubResource( 7 )
-anims/weaponIdle_flip_h = SubResource( 8 )
+anims/swordAttack = SubResource( 2 )
+anims/swordAttack_flip_h = SubResource( 3 )
+anims/weaponIdle = SubResource( 4 )
+anims/weaponIdle_flip_h = SubResource( 5 )
 
 [node name="WeaponArea" type="Area2D" parent="WeaponSprite"]
 monitorable = false
@@ -161,11 +161,11 @@ monitorable = false
 [node name="WeaponCollision" type="CollisionShape2D" parent="WeaponSprite/WeaponArea"]
 self_modulate = Color( 0.839216, 1, 0.172549, 1 )
 position = Vector2( 0, -17.3985 )
-shape = SubResource( 9 )
+shape = SubResource( 6 )
 
 [node name="EnemyCollision" type="CollisionShape2D" parent="."]
 position = Vector2( -0.383843, 6.29659 )
-shape = SubResource( 2 )
+shape = SubResource( 7 )
 
 [node name="VisibilityEnabler2D" type="VisibilityEnabler2D" parent="."]
 position = Vector2( 0, 6.7802 )
@@ -179,7 +179,7 @@ collision_layer = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StompDetector"]
 position = Vector2( 0.0799427, -1.13841 )
-shape = SubResource( 3 )
+shape = SubResource( 8 )
 
 [node name="FrontDetector" type="Area2D" parent="."]
 collision_layer = 2
@@ -187,7 +187,7 @@ collision_mask = 4
 
 [node name="FrontCollision" type="CollisionShape2D" parent="FrontDetector"]
 position = Vector2( 10.5538, -0.0556989 )
-shape = SubResource( 4 )
+shape = SubResource( 9 )
 
 [node name="BackDetector" type="Area2D" parent="."]
 collision_layer = 2
@@ -195,7 +195,7 @@ collision_mask = 4
 
 [node name="BackDetector" type="CollisionShape2D" parent="BackDetector"]
 position = Vector2( -9.33681, -0.750001 )
-shape = SubResource( 4 )
+shape = SubResource( 9 )
 
 [node name="JumpDelay" type="Timer" parent="."]
 wait_time = 0.3
