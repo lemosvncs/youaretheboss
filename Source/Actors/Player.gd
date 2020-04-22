@@ -1,72 +1,56 @@
 extends Actor # Which extends KinematicBody2D
-export var stomp_impulse: = 100.0
-# var direction : Vector2 = Vector2.ZERO
 
 signal player_hp(hp)
-#signal player_position(player_position)
+
+export var stomp_impulse: = 100.0
 
 var player_velocity:Vector2
-#func _on_EnemyDetector_area_entered(area: Area2D) -> void:
-#	print("detected")
-#	_velocity = calculate_stomp_velocity(_velocity, stomp_impulse)
+var direction:Vector2
+var is_jump_interrupted:bool=false
 
-func _physics_process(_delta: float) -> void:
-	var is_jump_interrupted = Input.is_action_just_released("jump") and _velocity.y < 0.0
-	var direction:= get_direction()
-	#_velocity = speed * direction
-	#_velocity.y = max(_velocity.y, speed.y)
-	_velocity = calculate_move_velocity(_velocity, direction, speed, is_jump_interrupted)
+func _physics_process(delta: float) -> void:
+	
+	_gravity(delta)
+	_set_direction()
+	_calculate_move_velocity()
+	_jump(delta)
+
+	
 	_velocity = move_and_slide(_velocity, Vector2.UP)
-	player_velocity = _velocity
-	
-	# Emit position signal to main, so the enemy can acess it
-	#emit_signal("player_position", position)
-	
-func damange_manager():
-	get_groups()
-	
-	
-func _on_EnemyDetector_body_entered(_body: Node) -> void:
+	player_velocity = _velocity	
 	#print(_velocity.y)
-	_velocity = calculate_stomp_velocity(_velocity, stomp_impulse)
-	#print(_velocity.y)
+	
+func _gravity(delta):
+	_velocity.y += gravity * delta
+	
+func _calculate_move_velocity() -> void:
+	# Me diz se "speed" vai ser aplicado pro player ir pra esquerda ou pra direita
+	_velocity.x = speed.x * direction.x
 
-func get_direction() -> Vector2:
-	return Vector2(
-		Input.get_action_strength("ui_right") - 
-		Input.get_action_strength("ui_left"),
-		- 1.0 if Input.is_action_just_pressed("jump") and is_on_floor() else 1.0
-	)
-		
-func calculate_move_velocity(
-		linear_velocity : Vector2,
-		direction : Vector2,
-		speed : Vector2,
-		is_jump_interrupted: bool
-	) -> Vector2:
-	var output: = linear_velocity
-	output.x = speed.x * direction.x
-	# _velocity.y += gravity * delta
+func _jump(delta):
 	
-	# Jump:
-	output.y += gravity * get_physics_process_delta_time()
 	if direction.y == -1.0: #Jump == true
-		output.y = speed.y * direction.y
+		_velocity.y = speed.y * direction.y
 	if is_jump_interrupted:
-		output.y = 0.0
+		_velocity.y = 1.0
+
+func _set_direction() -> void:
+	direction.x = Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left")
+	if Input.is_action_just_pressed("jump") and is_on_floor():
+		direction.y = -1.0
+	else:
+		direction.y = 1.0
 	
-	# Retur:
-	return output
-	
-func calculate_stomp_velocity(linear_velocity: Vector2, impulse: float) -> Vector2:
-	var out: = Vector2()
-	#out.x = linear_velocity.x
-	#out.y = -impulse
-	out = Vector2(linear_velocity.x, -impulse)
-	#print(out, " I: ", impulse)
-	return out
+func _stomp_velocity() -> void:
+	_velocity = Vector2(_velocity.x, -stomp_impulse)
+
+# SIGNALS:
+
+func _on_EnemyDetector_body_entered(_body: Node) -> void:
+	_stomp_velocity()
 
 func _on_Enemy_boss_damage(sword_damage) -> void:
 	hp -= sword_damage
 	emit_signal("player_hp", hp)
 	print("Player HP:", hp)
+
