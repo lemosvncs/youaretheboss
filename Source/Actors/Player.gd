@@ -8,7 +8,7 @@ var player_velocity:Vector2
 var direction:Vector2
 var is_jump_interrupted:bool=false
 var stomp=false
-onready var playerSprite = $PlayerSprite
+onready var playerSprite = $PlayerAnimationPlayer/PlayerSprite
 
 func _physics_process(_delta: float) -> void:
 	pass

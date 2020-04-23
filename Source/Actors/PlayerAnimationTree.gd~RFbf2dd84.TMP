@@ -1,0 +1,11 @@
+extends AnimationTree
+
+var playback: AnimationNodeStateMachinePlayback
+
+func _ready():
+	playback = get("parameters/playback") #curruent state
+	active = true
+	print("playback")
+
+func _physics_process(delta: float) -> void:
+	print("sdasd")

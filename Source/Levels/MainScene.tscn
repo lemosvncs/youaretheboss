@@ -17,11 +17,8 @@ speed = Vector2( 10, 500 )
 distance_to_follow_player = 40
 
 [node name="Player" parent="." instance=ExtResource( 2 )]
-position = Vector2( 554.018, 72.314 )
+position = Vector2( 465.573, 58.7765 )
 scale = Vector2( 2, 2 )
-speed = null
-gravity = null
-max_hp = null
 stomp_impulse = 300.0
 
 [node name="MyTiles" parent="." groups=[
