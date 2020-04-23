@@ -1,7 +1,7 @@
 extends Node
 class_name StateMachine
 
-var state = null setget set_state
+var state = null setget set_state, get_state
 var previous_state = null
 var states = {}
 
@@ -23,15 +23,18 @@ func _get_transition(delta):
 func _enter_state(new_state, old_state):
 	pass
 	
-func _exti_state(old_state, new_state):
+func _exit_state(old_state, new_state):
 	pass
+	
+func get_state():
+	return state
 
 func set_state(new_state):
 	previous_state = state
 	state = new_state
 	
 	if previous_state != null:
-		_exti_state(previous_state, new_state)
+		_exit_state(previous_state, new_state)
 	if new_state != null:
 		_enter_state(new_state, previous_state)
 		

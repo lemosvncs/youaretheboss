@@ -10,16 +10,19 @@ func _ready() -> void:
 	call_deferred("set_state", states.idle)
 
 func _set_direction() -> void:
+	
 	parent.direction.x = Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left")
 	
-	#if state == states.jump:
-	if Input.is_action_just_pressed("jump") and parent.is_on_floor():
-		parent.direction.y = -1.0
-	else:
-		parent.direction.y = 1.0
+	if state == states.idle or state == states.run:
+		if Input.is_action_just_pressed("jump"):
+			parent.direction.y = -1.0
+		else:
+			parent.direction.y = 1.0
+			
+		if Input.is_action_just_released("jump"):
+			parent.is_jump_interrupted	= true
 	
 func _state_logic(delta):
-	print(state)
 	parent._gravity(delta)
 	_set_direction()
 	parent._apply_movement()

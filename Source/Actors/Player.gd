@@ -27,6 +27,7 @@ func _jump(delta):
 	if direction.y == -1.0: #Jump == true
 		_velocity.y = speed.y * direction.y
 	if is_jump_interrupted:
+		is_jump_interrupted = false
 		_velocity.y = 1.0
 
 func _stomp_velocity() -> void:
