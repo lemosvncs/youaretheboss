@@ -18,9 +18,10 @@ func _set_direction() -> void:
 			parent.direction.y = -1.0
 		else:
 			parent.direction.y = 1.0
-			
+	
+	if state == states.jump:
 		if Input.is_action_just_released("jump"):
-			parent.is_jump_interrupted	= true
+			parent.is_jump_interrupted	= true 
 	
 func _state_logic(delta):
 	parent._gravity(delta)
