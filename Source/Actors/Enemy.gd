@@ -6,6 +6,7 @@ signal boss_damage(sword_damage)
 export var distance_to_follow_player:int = 50
 export var fugir_modifier:float = 1.3
 export var sword_damage:int = 1
+onready var enemySprite = $EnemySprite
 
 var can_attack:bool = false
 var attack:bool = false
@@ -33,18 +34,8 @@ func _ready() -> void:
 	#_velocity.x = speed.x
 
 func _physics_process(delta: float) -> void:
-	# Get playerPos
 	player_position = player.position
 	player_velocity = player._velocity
-	
-	_apply_gravity(delta)
-	_apply_movement()
-	
-	define_player_position()
-	jump_tiles()
-	go_to_player()
-	animation_manager()
-	sword_attack()
 	
 func _apply_gravity(delta):
 	_velocity.y += gravity * delta
@@ -62,36 +53,35 @@ func define_player_position():
 	enx = position.x
 	delta_pos = plx - enx
 	
-	
-func animation_manager():
-	#print(player_velocity)
-	if player_velocity.x == 0:
-		$EnemySprite.play("idle")
-		if delta_pos > 0:
-			$EnemySprite.flip_h = false
-			#$WeaponSprite.flip_h = true
-		elif delta_pos <= 0:
-			$EnemySprite.flip_h = true
-			#$WeaponSprite.flip_h = true
-			#print(delta_pos, $WeaponSprite.flip_h)
-	# Moving if moving:
-	elif moving_right: 
-		$EnemySprite.play("moving")
-		$EnemySprite.flip_h = false
-	elif !moving_right:
-		$EnemySprite.play("moving")
-		$EnemySprite.flip_h = true
-		
-	# Attack:
-	if attack:
-		if moving_right:
-			$WeaponSprite/AnimationPlayer.play("swordAttack")
-		elif !moving_right:
-			$WeaponSprite/AnimationPlayer.play("swordAttack_flip_h")
-	elif moving_right:
-		$WeaponSprite/AnimationPlayer.play("weaponIdle")
-	elif !moving_right:
-		$WeaponSprite/AnimationPlayer.play("weaponIdle_flip_h")
+#func animation_manager():
+#	#print(player_velocity)
+#	if player_velocity.x == 0:
+#		$EnemySprite.play("idle")
+#		if delta_pos > 0:
+#			$EnemySprite.flip_h = false
+#			#$WeaponSprite.flip_h = true
+#		elif delta_pos <= 0:
+#			$EnemySprite.flip_h = true
+#			#$WeaponSprite.flip_h = true
+#			#print(delta_pos, $WeaponSprite.flip_h)
+#	# Moving if moving:
+#	elif moving_right: 
+#		$EnemySprite.play("moving")
+#		$EnemySprite.flip_h = false
+#	elif !moving_right:
+#		$EnemySprite.play("moving")
+#		$EnemySprite.flip_h = true
+#
+#	# Attack:
+#	if attack:
+#		if moving_right:
+#			$WeaponSprite/AnimationPlayer.play("swordAttack")
+#		elif !moving_right:
+#			$WeaponSprite/AnimationPlayer.play("swordAttack_flip_h")
+#	elif moving_right:
+#		$WeaponSprite/AnimationPlayer.play("weaponIdle")
+#	elif !moving_right:
+#		$WeaponSprite/AnimationPlayer.play("weaponIdle_flip_h")
 		
 func sword_attack():
 	if attack and can_attack:

@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=2]
+[gd_scene load_steps=21 format=2]
 
 [ext_resource path="res://Source/Actors/Enemy.gd" type="Script" id=1]
 [ext_resource path="res://Assets/Sprites/knight_f_idle_anim_f1.png" type="Texture" id=2]
@@ -10,6 +10,7 @@
 [ext_resource path="res://Assets/Sprites/knight_f_idle_anim_f2.png" type="Texture" id=8]
 [ext_resource path="res://Assets/Sprites/knight_f_run_anim_f3.png" type="Texture" id=9]
 [ext_resource path="res://Assets/Sprites/weapon_anime_sword.png" type="Texture" id=10]
+[ext_resource path="res://EnemyStateMachine.gd" type="Script" id=11]
 
 [sub_resource type="SpriteFrames" id=1]
 animations = [ {
@@ -133,6 +134,9 @@ position = Vector2( -0.0897446, 0 )
 collision_layer = 2
 collision_mask = 5
 script = ExtResource( 1 )
+
+[node name="EnemyStateMachine" type="Node" parent="."]
+script = ExtResource( 11 )
 
 [node name="EnemySprite" type="AnimatedSprite" parent="."]
 frames = SubResource( 1 )
