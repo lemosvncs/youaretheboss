@@ -305,7 +305,7 @@ script = ExtResource( 1 )
 texture = ExtResource( 12 )
 vframes = 3
 hframes = 4
-frame = 7
+frame = 6
 
 [node name="En_AnimationPlayer" type="AnimationPlayer" parent="."]
 playback_process_mode = 0
