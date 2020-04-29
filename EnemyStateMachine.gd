@@ -11,7 +11,7 @@ func _ready() -> void:
 func _state_logic(delta):
 	parent._apply_gravity(delta)
 	parent._apply_movement()
-	
+
 	parent.define_player_position()
 	parent.jump_tiles()
 	parent.go_to_player()

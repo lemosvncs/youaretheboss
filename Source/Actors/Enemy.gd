@@ -36,6 +36,14 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	player_position = player.position
 	player_velocity = player._velocity
+	define_player_position()
+	
+func define_player_position():
+	plx = player_position.x
+	enx = position.x
+	delta_pos = plx - enx
+	
+# Movement
 	
 func _apply_gravity(delta):
 	_velocity.y += gravity * delta
@@ -48,10 +56,7 @@ func _apply_movement():
 		moving_right = false
 	#print(moving_right)
 
-func define_player_position():
-	plx = player_position.x
-	enx = position.x
-	delta_pos = plx - enx
+
 	
 #func animation_manager():
 #	#print(player_velocity)
@@ -134,19 +139,16 @@ func go_to_player():
 		_velocity.x = 0
 	#print(delta_pos)
 		
-	
-func _on_AtompDetector_body_entered(_body: Node) -> void:
+func _on_AtompDetector_body_entered(body: Node) -> void:
 	hp -= 1
 	emit_signal("enemy_hp_update", hp)
+	print(body.name)
 	#print(hp)
 	#if body.global_position.y > get_node("StompDetector").global_position.y:
 	#	return
 	#get_node("EnemyCollision").disabled = true
 	#queue_free()
 
-	
-
-	
 	
 func _on_FrontDetector_body_entered(body: Node) -> void:
 	if body.is_in_group("Tiles"):

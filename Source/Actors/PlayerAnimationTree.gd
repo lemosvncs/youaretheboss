@@ -13,7 +13,7 @@ func _ready():
 	#_get_transition()
 
 func _physics_process(delta: float) -> void:
-	_state_logic(delta)
+	_state_logic(delta)	
 
 func _state_logic(delta):
 	_get_transition()

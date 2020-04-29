@@ -4,7 +4,7 @@
 [ext_resource path="res://Source/Actors/Player.gd" type="Script" id=9]
 [ext_resource path="res://Source/Actors/PlayerAnimationTree.gd" type="Script" id=10]
 
-[sub_resource type="Animation" id=17]
+[sub_resource type="Animation" id=1]
 resource_name = "fall"
 length = 0.75
 tracks/0/type = "value"
@@ -20,7 +20,7 @@ tracks/0/keys = {
 "values": [ 7, 4 ]
 }
 
-[sub_resource type="Animation" id=18]
+[sub_resource type="Animation" id=2]
 resource_name = "idle"
 loop = true
 tracks/0/type = "value"
@@ -36,7 +36,7 @@ tracks/0/keys = {
 "values": [ 0, 3 ]
 }
 
-[sub_resource type="Animation" id=19]
+[sub_resource type="Animation" id=3]
 resource_name = "jump"
 length = 0.5
 step = 0.5
@@ -65,7 +65,7 @@ tracks/1/keys = {
 "values": [ Color( 0.109804, 0.380392, 0.72549, 1 ) ]
 }
 
-[sub_resource type="Animation" id=20]
+[sub_resource type="Animation" id=4]
 resource_name = "run"
 loop = true
 tracks/0/type = "value"
@@ -81,23 +81,23 @@ tracks/0/keys = {
 "values": [ 4, 5, 6, 7, 7 ]
 }
 
-[sub_resource type="AnimationNodeAnimation" id=4]
+[sub_resource type="AnimationNodeAnimation" id=5]
 animation = "fall"
 
-[sub_resource type="AnimationNodeAnimation" id=5]
+[sub_resource type="AnimationNodeAnimation" id=6]
 animation = "idle"
 
-[sub_resource type="AnimationNodeAnimation" id=6]
+[sub_resource type="AnimationNodeAnimation" id=7]
 animation = "jump"
 
-[sub_resource type="AnimationNodeAnimation" id=7]
+[sub_resource type="AnimationNodeAnimation" id=8]
 animation = "run"
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=8]
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=9]
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=10]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=11]
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=12]
 
@@ -107,24 +107,24 @@ animation = "run"
 priority = 2
 
 [sub_resource type="AnimationNodeStateMachine" id=15]
-states/fall/node = SubResource( 4 )
+states/fall/node = SubResource( 5 )
 states/fall/position = Vector2( 357, 340 )
-states/idle/node = SubResource( 5 )
+states/idle/node = SubResource( 6 )
 states/idle/position = Vector2( 323, 179 )
-states/jump/node = SubResource( 6 )
+states/jump/node = SubResource( 7 )
 states/jump/position = Vector2( 594, 324 )
-states/run/node = SubResource( 7 )
+states/run/node = SubResource( 8 )
 states/run/position = Vector2( 594, 179 )
-transitions = [ "idle", "run", SubResource( 8 ), "run", "idle", SubResource( 9 ), "jump", "fall", SubResource( 10 ), "fall", "idle", SubResource( 12 ), "idle", "jump", SubResource( 13 ), "run", "jump", SubResource( 14 ) ]
+transitions = [ "idle", "run", SubResource( 9 ), "run", "idle", SubResource( 10 ), "jump", "fall", SubResource( 11 ), "fall", "idle", SubResource( 12 ), "idle", "jump", SubResource( 13 ), "run", "jump", SubResource( 14 ) ]
 start_node = "idle"
 graph_offset = Vector2( 226.07, 117.084 )
 
 [sub_resource type="AnimationNodeStateMachinePlayback" id=16]
 
-[sub_resource type="RectangleShape2D" id=2]
+[sub_resource type="RectangleShape2D" id=17]
 extents = Vector2( 8.80762, 13.4959 )
 
-[sub_resource type="RectangleShape2D" id=3]
+[sub_resource type="RectangleShape2D" id=18]
 extents = Vector2( 7.89203, 12.5479 )
 
 [node name="Player" type="KinematicBody2D" groups=[
@@ -134,17 +134,17 @@ collision_mask = 6
 script = ExtResource( 9 )
 
 [node name="Sprite" type="Sprite" parent="."]
-modulate = Color( 0.109804, 0.380392, 0.72549, 1 )
 texture = ExtResource( 1 )
 hframes = 8
+frame = 3
 
 [node name="PlayerAnimationPlayer" type="AnimationPlayer" parent="."]
 autoplay = "idle"
 playback_process_mode = 0
-anims/fall = SubResource( 17 )
-anims/idle = SubResource( 18 )
-anims/jump = SubResource( 19 )
-anims/run = SubResource( 20 )
+anims/fall = SubResource( 1 )
+anims/idle = SubResource( 2 )
+anims/jump = SubResource( 3 )
+anims/run = SubResource( 4 )
 
 [node name="PlayerAnimationTree" type="AnimationTree" parent="."]
 tree_root = SubResource( 15 )
@@ -157,7 +157,7 @@ script = ExtResource( 10 )
 [node name="PlayerCollision" type="CollisionShape2D" parent="."]
 visible = false
 position = Vector2( -0.412911, 1.09958 )
-shape = SubResource( 2 )
+shape = SubResource( 17 )
 
 [node name="Camera2D" type="Camera2D" parent="."]
 offset = Vector2( 0, -40 )
@@ -167,15 +167,15 @@ drag_margin_v_enabled = true
 smoothing_enabled = true
 
 [node name="EnemyDetector" type="Area2D" parent="."]
+visible = false
 position = Vector2( -0.514076, -1.4951 )
 monitorable = false
 collision_layer = 0
 collision_mask = 2
 
 [node name="EnemyDetectorShape" type="CollisionShape2D" parent="EnemyDetector"]
-visible = false
 modulate = Color( 0.0745098, 0.952941, 0, 1 )
 position = Vector2( 0.319401, 6.05471 )
-shape = SubResource( 3 )
+shape = SubResource( 18 )
 [connection signal="area_entered" from="EnemyDetector" to="." method="_on_EnemyDetector_area_entered"]
 [connection signal="body_entered" from="EnemyDetector" to="." method="_on_EnemyDetector_body_entered"]
